@@ -1,6 +1,0 @@
-package graphs.model;
-
-public class Element {
-	private int number;
-	private int groupId
-}

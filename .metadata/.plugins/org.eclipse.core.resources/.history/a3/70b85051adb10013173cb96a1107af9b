@@ -1,0 +1,103 @@
+package graphs.algoritm;
+
+import graphs.model.Edge;
+import graphs.model.Element;
+import graphs.model.Group;
+import graphs.model.Schema;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class Pair {
+	Schema schema;
+
+	public Pair(Schema schema) {
+		super();
+		this.schema = schema;
+	}
+
+	public int calculate() {
+		int result = 0;
+		for (Edge e : schema.getEdges()) {
+			result += this.calculate(e);
+		}
+		System.out.println("Full Delay: " + result);
+		return result;
+	}
+
+	public int calculate(Edge e) {
+		int result = 0;
+		Set<Group> grs = new HashSet<Group>();
+		for (Element element : e.getElements()) {
+			for (Group g : schema.getGroups().values()) {
+				if (g.getElements().contains(element)) {
+					grs.add(g);
+				}
+			}
+		}
+		result = (grs.size() == 1) ? 0 : grs.size();
+		System.out.println("Delay for edge " + e + ": " + result);
+		return result;
+	}
+
+	public void run() {
+		int prevResult = Integer.MAX_VALUE;
+		int curRes = 0;
+		boolean isChanged = true;
+		int unChangedCount = 0;
+		while (true) {
+			if (!isChanged)
+				unChangedCount++;
+			if (unChangedCount >= 5)
+				break;
+
+			// todo - pair replacement
+			int group1 = (int) (schema.getGroups().size() * Math.random());
+			int group2;
+			do {
+				group2 = (int) (schema.getGroups().size() * Math.random());
+			} while (group1 == group2);
+
+			Group g1 = schema.getGroups().get(group1 + 1);
+			Group g2 = schema.getGroups().get(group2 + 1);
+
+			Element e1 = this.getElement(g1.getElements(),
+					(int) (Math.random() * g1.getElements().size()));
+
+			Element e2 = this.getElement(g2.getElements(),
+					(int) (Math.random() * g2.getElements().size()));
+
+			g1.getElements().add(e2);
+			g1.getElements().remove(e1);
+
+			g2.getElements().add(e1);
+			g2.getElements().remove(e2);
+
+			curRes = this.calculate();
+			System.out.println("Calculating: " + curRes);
+			if (curRes < prevResult) {
+				prevResult = curRes;
+				isChanged = true;
+			} else {
+				isChanged = false;
+				g2.getElements().add(e2);
+				g2.getElements().remove(e1);
+
+				g1.getElements().add(e1);
+				g1.getElements().remove(e2);
+				// todo rollback
+			}
+		}
+	}
+
+	private Element getElement(Set<Element> set, int index) {
+		int counter = 0;
+		for (Element e1 : set) {
+			if (counter == index) {
+				return e1;
+			}
+			counter++;
+		}
+		return null;
+	}
+}

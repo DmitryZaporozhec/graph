@@ -1,12 +1,23 @@
 package graphs.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class Schema {
 	List<Element> elements;
 	List<Edge> edges;
+	Map<Integer, Group> groups;
+
+	public Map<Integer, Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Map<Integer, Group> groups) {
+		this.groups = groups;
+	}
 
 	public List<Element> getElements() {
 		return elements;
@@ -25,13 +36,15 @@ public class Schema {
 	}
 
 	public void generateSchema(int elementAmount, int edgeAmount,
-			int minLenghtEdge, int maxLenghtEdge) {
+			int minLenghtEdge, int maxLenghtEdge, int groupNumber) {
+		// create elements
 		elements = new ArrayList<Element>();
 		for (int i = 0; i < elementAmount; i++) {
 			Element e = new Element();
 			e.setNumber(i);
 			elements.add(e);
 		}
+		// create edges
 		edges = new ArrayList<Edge>();
 		for (int i = 0; i < edgeAmount; i++) {
 			Edge e = new Edge();
@@ -45,12 +58,43 @@ public class Schema {
 			}
 			edges.add(e);
 		}
+		// create initials groups
+		groups = new HashMap<Integer, Group>();
+		Integer groupCount = 1;
+		int elsInGroup = elementAmount % groupNumber == 0 ? elementAmount
+				/ groupNumber : ((elementAmount / groupNumber) + 1);
+
+		if (groups.get(groupCount) == null) {
+			Group gp = new Group();
+			gp.setNumber(groupCount);
+			gp.setElements(new HashSet());
+			groups.put(groupCount, gp);
+		}
+
+		for (Element e : elements) {
+			Group gp = groups.get(groupCount);
+			if (gp.getElements().size() < elsInGroup) {
+				gp.getElements().add(e);
+			} else {
+				groupCount++;
+				Group gpNew = new Group();
+				gpNew.setNumber(groupCount);
+				gpNew.setElements(new HashSet());
+				gpNew.getElements().add(e);
+				groups.put(groupCount, gpNew);
+			}
+
+		}
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Schema [edges=").append(edges).append("]");
+		builder.append("Schema [edges=");
+		builder.append(edges);
+		builder.append(",\n groups=");
+		builder.append(groups);
+		builder.append("]");
 		return builder.toString();
 	}
 }

@@ -1,0 +1,41 @@
+package graphs.algoritm;
+
+import graphs.model.Edge;
+import graphs.model.Element;
+import graphs.model.Group;
+import graphs.model.Schema;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class Pair {
+	Schema schema;
+
+	public Pair(Schema schema) {
+		super();
+		this.schema = schema;
+	}
+
+	public int calculate() {
+		int result = 0;
+		for (Edge e : schema.getEdges()) {
+			result += this.calculate(e);
+		}
+		System.out.println("Full Delay: "result);
+		return result;
+	}
+
+	public int calculate(Edge e) {
+		int result = 0;
+		Set<Group> grs = new HashSet<Group>();
+		for (Element element : e.getElements()) {
+			for (Group g : schema.getGroups().values()) {
+				if (g.getElements().contains(element)) {
+					grs.add(g);
+				}
+			}
+		}
+		return (grs.size() == 1) ? 0 : grs.size();
+	}
+
+}

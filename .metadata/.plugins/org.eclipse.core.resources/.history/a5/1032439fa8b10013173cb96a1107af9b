@@ -1,0 +1,7 @@
+package graphs.algoritm;
+
+import graphs.model.Schema;
+
+public class Pair {
+	Schema schema;
+}

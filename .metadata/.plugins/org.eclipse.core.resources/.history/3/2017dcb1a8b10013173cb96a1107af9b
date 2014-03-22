@@ -1,0 +1,13 @@
+package graphs.algoritm;
+
+import graphs.model.Schema;
+
+public class Pair {
+	Schema schema;
+
+	public Pair(Schema schema) {
+		super();
+		this.schema = new Schema();
+	}
+
+}

@@ -2,7 +2,6 @@ package graphs.model;
 
 public class Element {
 	private int number;
-	private int groupId;
 
 	public int getNumber() {
 		return number;
@@ -10,14 +9,6 @@ public class Element {
 
 	public void setNumber(int number) {
 		this.number = number;
-	}
-
-	public int getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(int groupId) {
-		this.groupId = groupId;
 	}
 
 	@Override
@@ -45,8 +36,7 @@ public class Element {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Element [number=").append(number).append(", groupId=")
-				.append(groupId).append("]");
+		builder.append("Element [number=").append(number).append("]");
 		return builder.toString();
 	}
 }

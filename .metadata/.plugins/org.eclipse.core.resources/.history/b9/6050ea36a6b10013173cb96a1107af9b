@@ -1,0 +1,59 @@
+package graphs.model;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+public class Schema {
+	List<Element> elements;
+	List<Edge> edges;
+
+	public List<Element> getElements() {
+		return elements;
+	}
+
+	public void setElements(List<Element> elements) {
+		this.elements = elements;
+	}
+
+	public List<Edge> getEdges() {
+		return edges;
+	}
+
+	public void setEdges(List<Edge> edges) {
+		this.edges = edges;
+	}
+
+	public void generateSchema(int elementAmount, int edgeAmount,
+			int minLenghtEdge, int maxLenghtEdge, int groupNumber) {
+		// create elements
+		elements = new ArrayList<Element>();
+		for (int i = 0; i < elementAmount; i++) {
+			Element e = new Element();
+			e.setNumber(i);
+			elements.add(e);
+		}
+		// create edges
+		edges = new ArrayList<Edge>();
+		for (int i = 0; i < edgeAmount; i++) {
+			Edge e = new Edge();
+			e.setNumber(i);
+			e.setElements(new HashSet<Element>());
+			int elemetnsInEdgeCount = minLenghtEdge
+					+ (int) ((maxLenghtEdge - minLenghtEdge) * Math.random());
+			while (e.getElements().size() < elemetnsInEdgeCount) {
+				e.getElements().add(
+						elements.get((int) (Math.random() * elementAmount)));
+			}
+			edges.add(e);
+		}
+		// create initials groups
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Schema [edges=").append(edges).append("]");
+		return builder.toString();
+	}
+}
