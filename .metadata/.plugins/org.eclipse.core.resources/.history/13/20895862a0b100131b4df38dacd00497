@@ -1,0 +1,7 @@
+package graphs.model;
+
+import java.util.List;
+
+public class Edge {
+	List<Element>
+}

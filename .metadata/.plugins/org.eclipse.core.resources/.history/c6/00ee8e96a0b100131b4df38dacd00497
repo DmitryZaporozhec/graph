@@ -1,0 +1,8 @@
+package graphs.model;
+
+import java.util.List;
+
+public class Schema {
+	List<Element> elements;
+	List<Edge> edges;
+}
